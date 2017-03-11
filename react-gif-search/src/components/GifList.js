@@ -7,7 +7,7 @@ import GifItem from './GifItem';
     });
     
     return (
-      <ul>{gifItems}</ul>
+      <div className="gif-list">{gifItems}</div>
     );
       
   };
