@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import SearchBar from './components/SearchBar.js';
 import GifList from './components/GifList';
+import request from 'superagent';
 
 class App extends React.Component {
   
@@ -9,31 +10,22 @@ class App extends React.Component {
     super(props);
     
     this.state = {
-      gifs: [
-        {
-          id: 1,
-          url: 'http://fakeimg.pl/300/'
-        },
-        {
-          id: 2,
-          url: 'http://fakeimg.pl/300/'
-        },
-        {
-          id: 3,
-          url: 'http://fakeimg.pl/300/'
-        }
-      ]
+      gifs: []
     }
   }
   
-  handleTermChange(term){
-    console.log(term);
+  handleTermChange = (term) => {
+    const url = `http://api.giphy.com/v1/gifs/search?q=${term.replace(/\s/g, '+')}&api_key=dc6zaTOxFJmzC`;
+    
+    request.get(url, (err, res) => {
+      this.setState({ gifs: res.body.data })
+    });
   }
   
   render() {
     return (
       <div className="greeting">
-        <SearchBar onTermChange={this.handleTermChange} />
+        <SearchBar onTermChange={term => this.handleTermChange(term)} />
         <GifList gifs={this.state.gifs} />
       </div>
     );
